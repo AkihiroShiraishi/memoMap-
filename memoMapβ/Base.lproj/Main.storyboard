@@ -40,6 +40,10 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gAc-QR-JiV" secondAttribute="trailing" id="jdU-Uu-fHD"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="dispMap" destination="cwX-f1-Y1Z" id="37j-Of-Okx"/>
+                        <outlet property="searchInputText" destination="gAc-QR-JiV" id="N2n-Ti-Jv7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
