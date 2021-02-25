@@ -27,11 +27,20 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cwX-f1-Y1Z">
                                 <rect key="frame" x="0.0" y="76" width="414" height="786"/>
                             </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FSl-tf-di5">
+                                <rect key="frame" x="346" y="727" width="48" height="48"/>
+                                <state key="normal" image="icon_147570_48"/>
+                                <connections>
+                                    <action selector="currentLocation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="17D-lr-bYN"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FSl-tf-di5" secondAttribute="trailing" constant="20" id="1bn-wl-3ED"/>
                             <constraint firstItem="gAc-QR-JiV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Lue-Z4-M8W"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="FSl-tf-di5" secondAttribute="bottom" constant="87" id="Mfg-Gs-bJD"/>
                             <constraint firstItem="cwX-f1-Y1Z" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="32" id="QbT-gt-9Xb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="cwX-f1-Y1Z" secondAttribute="bottom" id="RBf-rw-bni"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cwX-f1-Y1Z" secondAttribute="trailing" id="Ry2-Wq-L8o"/>
@@ -51,6 +60,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="icon_147570_48" width="48" height="48"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
