@@ -15,6 +15,7 @@
 		860DC64725E47CC900D4B377 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 860DC64525E47CC900D4B377 /* LaunchScreen.storyboard */; };
 		860DC65225E47CCA00D4B377 /* memoMap_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860DC65125E47CCA00D4B377 /* memoMap_Tests.swift */; };
 		860DC65D25E47CCA00D4B377 /* memoMap_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860DC65C25E47CCA00D4B377 /* memoMap_UITests.swift */; };
+		86F3930625EB225100D050A5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F3930525EB225100D050A5 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		860DC65825E47CCA00D4B377 /* memoMapβUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "memoMapβUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		860DC65C25E47CCA00D4B377 /* memoMap_UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = memoMap_UITests.swift; sourceTree = "<group>"; };
 		860DC65E25E47CCA00D4B377 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		86F3930525EB225100D050A5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86F3930625EB225100D050A5 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +86,7 @@
 				860DC65025E47CCA00D4B377 /* memoMapβTests */,
 				860DC65B25E47CCA00D4B377 /* memoMapβUITests */,
 				860DC63825E47CC700D4B377 /* Products */,
+				86F3930425EB225100D050A5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,6 +130,14 @@
 				860DC65E25E47CCA00D4B377 /* Info.plist */,
 			);
 			path = "memoMapβUITests";
+			sourceTree = "<group>";
+		};
+		86F3930425EB225100D050A5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				86F3930525EB225100D050A5 /* MapKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

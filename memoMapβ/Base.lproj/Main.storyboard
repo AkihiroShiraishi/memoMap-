@@ -26,6 +26,10 @@
                             </textField>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cwX-f1-Y1Z">
                                 <rect key="frame" x="0.0" y="76" width="414" height="786"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="ggk-jI-XNt" appends="YES" id="TSh-z0-5df"/>
+                                </connections>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FSl-tf-di5">
                                 <rect key="frame" x="346" y="727" width="48" height="48"/>
@@ -55,6 +59,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="ggk-jI-XNt"/>
             </objects>
             <point key="canvasLocation" x="139" y="94"/>
         </scene>
