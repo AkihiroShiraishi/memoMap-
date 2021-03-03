@@ -8,13 +8,15 @@
 import UIKit
 import MapKit
 
-class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate, MKMapViewDelegate {
 
     @IBOutlet weak var searchInputText: UITextField!
     @IBOutlet weak var dispMap: MKMapView!
     var locationManager: CLLocationManager!
     var latitude: Double = 0.0
     var longitude: Double = 0.0
+    var toCordinate: CLLocationCoordinate2D?
+    var isUserLocation: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         // locationManager生成
         locationManager = CLLocationManager()
         locationManager.delegate = self
+        dispMap.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -140,6 +143,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         if locationManager.authorizationStatus == .notDetermined || locationManager.authorizationStatus == .denied || locationManager.authorizationStatus == .restricted {
             self.displayDialogOfLocationAuth()
         } else {
+            self.isUserLocation = true
             let location = CLLocationCoordinate2DMake(self.latitude, self.longitude)
             let pin = MKPointAnnotation()
 
@@ -150,6 +154,142 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
             self.dispMap.addAnnotation(pin)
 
             self.dispMap.region = MKCoordinateRegion(center: location, latitudinalMeters: 500.0, longitudinalMeters: 500.0)
+        }
+    }
+    
+    func registerNewLoccation(coodinate:CLLocationCoordinate2D) {
+        let ac = UIAlertController(title: "タイトル", message: "メッセージ", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: {[weak ac] (action) -> Void in
+            guard let textFields = ac?.textFields else {
+                return
+            }
+
+            guard !textFields.isEmpty else {
+                return
+            }
+
+            for text in textFields {
+                if text.tag == 1 {
+                    self.addPin(title: text.text!, coordinate: coodinate)
+                } else {
+                    
+                }
+            }
+        })
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        //textfiled1の追加
+        ac.addTextField(configurationHandler: {(text:UITextField!) -> Void in
+            text.placeholder = "目的地"
+            text.tag  = 1
+        })
+        //textfiled2の追加
+        ac.addTextField(configurationHandler: {(text:UITextField!) -> Void in
+            text.placeholder = "内容"
+            text.tag  = 2
+        })
+
+        ac.addAction(ok)
+        ac.addAction(cancel)
+
+        present(ac, animated: true, completion: nil)
+
+    }
+    
+    func addPin(title: String, coordinate: CLLocationCoordinate2D) {
+        let pin = MKPointAnnotation()
+        // 座標をピンに設定
+        pin.coordinate = coordinate
+        // タイトル指定
+        pin.title = title
+        
+        // ピンを追加
+        self.dispMap.addAnnotation(pin)
+    }
+    
+    @IBAction func isLongPress(_ sender: UILongPressGestureRecognizer) {
+        if(sender.state != UIGestureRecognizer.State.began){
+                return
+            }
+
+            // ロングタップした位置情報を取得
+        let location:CGPoint = sender.location(in: self.dispMap)
+
+            // 取得した位置情報をCLLocationCoordinate2D（座標）に変換
+        let coordinate:CLLocationCoordinate2D = self.dispMap.convert(location, toCoordinateFrom: self.dispMap)
+
+        self.registerNewLoccation(coodinate: coordinate)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if self.isUserLocation {
+            self.isUserLocation = false
+            return nil
+        }
+
+        //アノテーションビューを生成する。
+        let pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: nil)
+        //吹き出しを表示可能にする。
+        pin.canShowCallout = true
+
+        //経路ボタンをアノテーションビューに追加する。
+        let button = UIButton()
+        button.frame = CGRect(x: 0,y: 0,width: 40,height: 30)
+        button.setTitle("経路", for: .normal)
+        button.layer.cornerRadius = 0.5
+        button.backgroundColor = UIColor.white
+        button.setTitleColor(UIColor.black, for:.normal)
+        button.addTarget(self, action: #selector(tappedButton(_:toCordinate:)), for: UIControl.Event.touchUpInside)
+        pin.rightCalloutAccessoryView = button
+
+        return pin
+    }
+    
+
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+        renderer.strokeColor = UIColor.blue
+        renderer.lineWidth = 5.0
+        return renderer
+    }
+    
+    @objc func tappedButton(_ sender:UIButton, toCordinate:CLLocationCoordinate2D) {
+        if self.dispMap.overlays.count != 0 {
+            // 経路表示リセット
+            self.dispMap.removeOverlays(self.dispMap.overlays)
+        }
+        if self.toCordinate != nil {
+            let fromCoordinate :CLLocationCoordinate2D = CLLocationCoordinate2DMake(self.latitude, self.longitude)
+            let toCoordinate   :CLLocationCoordinate2D = self.toCordinate!
+            if fromCoordinate.latitude == toCordinate.latitude && fromCoordinate.longitude == toCordinate.longitude {
+                // 現在地と目的地の場所が同一だった場合(例外パターン想定)
+            }
+            let fromPlacemark = MKPlacemark(coordinate:fromCoordinate, addressDictionary:nil)
+            let toPlacemark = MKPlacemark(coordinate:toCoordinate, addressDictionary:nil)
+            let fromItem = MKMapItem(placemark:fromPlacemark);
+            let toItem = MKMapItem(placemark:toPlacemark);
+            let request = MKDirections.Request()
+                request.source = fromItem
+                request.destination = toItem
+                request.requestsAlternateRoutes = true; //複数経路
+            request.transportType = MKDirectionsTransportType.walking
+            let directions = MKDirections(request:request)
+            directions.calculate { [unowned self] response, error in
+                guard let unwrappedResponse = response else { return }
+
+                for route in unwrappedResponse.routes {
+                   self.dispMap.addOverlay(route.polyline)
+                   self.dispMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+                }
+            }
+        } else {
+            // 目的地を選択してください
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if let annotation = view.annotation{
+            self.toCordinate = annotation.coordinate
         }
     }
 }
