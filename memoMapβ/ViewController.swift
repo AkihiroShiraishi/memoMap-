@@ -7,8 +7,9 @@
 
 import UIKit
 import MapKit
+import FloatingPanel
 
-class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate, MKMapViewDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate, MKMapViewDelegate, FloatingPanelControllerDelegate {
 
     @IBOutlet weak var searchInputText: UITextField!
     @IBOutlet weak var dispMap: MKMapView!
@@ -17,6 +18,8 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
     var longitude: Double = 0.0
     var toCordinate: CLLocationCoordinate2D?
     var isUserLocation: Bool = false
+    
+    var fpc:FloatingPanelController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -271,7 +274,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
             let request = MKDirections.Request()
                 request.source = fromItem
                 request.destination = toItem
-                request.requestsAlternateRoutes = true; //複数経路
+                request.requestsAlternateRoutes = false; //複数経路
             request.transportType = MKDirectionsTransportType.walking
             let directions = MKDirections(request:request)
             directions.calculate { [unowned self] response, error in
@@ -282,6 +285,15 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
                    self.dispMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
                 }
             }
+            
+            // モーダル表示
+            self.fpc = FloatingPanelController()
+            self.fpc.layout = MyFloatingPanelLayout()
+            self.fpc.delegate = self
+            
+            let destinationVC = DestinationViewController()
+            fpc.set(contentViewController: destinationVC)
+            fpc.addPanel(toParent: self)
         } else {
             // 目的地を選択してください
         }
@@ -294,3 +306,15 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
     }
 }
 
+
+class MyFloatingPanelLayout: FloatingPanelLayout {
+    let position: FloatingPanelPosition = .bottom
+    let initialState: FloatingPanelState = .tip
+    var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] {
+        return [
+            .full: FloatingPanelLayoutAnchor(absoluteInset: 150.0, edge: .top, referenceGuide: .safeArea),
+            .half: FloatingPanelLayoutAnchor(fractionalInset: 150.0, edge: .bottom, referenceGuide: .safeArea),
+            .tip: FloatingPanelLayoutAnchor(absoluteInset: 150.0, edge: .bottom, referenceGuide: .safeArea),
+        ]
+    }
+}
