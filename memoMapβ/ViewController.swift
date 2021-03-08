@@ -17,6 +17,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
     var latitude: Double = 0.0
     var longitude: Double = 0.0
     var toCordinate: CLLocationCoordinate2D?
+    var toTitle: String = ""
     var isUserLocation: Bool = false
     
     var fpc:FloatingPanelController!
@@ -242,7 +243,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         button.layer.cornerRadius = 0.5
         button.backgroundColor = UIColor.white
         button.setTitleColor(UIColor.black, for:.normal)
-        button.addTarget(self, action: #selector(tappedButton(_:toCordinate:)), for: UIControl.Event.touchUpInside)
+        button.addTarget(self, action: #selector(tappedRouteButton(_:toCordinate:)), for: UIControl.Event.touchUpInside)
         pin.rightCalloutAccessoryView = button
 
         return pin
@@ -256,7 +257,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         return renderer
     }
     
-    @objc func tappedButton(_ sender:UIButton, toCordinate:CLLocationCoordinate2D) {
+    @objc func tappedRouteButton(_ sender:UIButton, toCordinate:CLLocationCoordinate2D) {
         if self.dispMap.overlays.count != 0 {
             // 経路表示リセット
             self.dispMap.removeOverlays(self.dispMap.overlays)
@@ -291,7 +292,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
             self.fpc.layout = MyFloatingPanelLayout()
             self.fpc.delegate = self
             
-            let destinationVC = DestinationViewController()
+            let destinationVC = DestinationViewController(toCordinate: self.toCordinate!, title: self.toTitle, fpc: self.fpc, dispMap: self.dispMap)
             fpc.set(contentViewController: destinationVC)
             fpc.addPanel(toParent: self)
         } else {
@@ -302,6 +303,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let annotation = view.annotation{
             self.toCordinate = annotation.coordinate
+            self.toTitle = annotation.title!!
         }
     }
 }
