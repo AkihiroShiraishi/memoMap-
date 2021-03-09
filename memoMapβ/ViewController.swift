@@ -8,6 +8,23 @@
 import UIKit
 import MapKit
 import FloatingPanel
+import RealmSwift
+
+class Pin: Object {
+    
+    // タイトル
+    @objc dynamic var title = ""
+    
+    // 内容
+    @objc dynamic var content = ""
+   
+    // 緯度
+    @objc dynamic var latitude = ""
+
+    // 経度
+    @objc dynamic var longitude = ""
+
+}
 
 class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate, MKMapViewDelegate, FloatingPanelControllerDelegate {
 
@@ -172,13 +189,8 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
                 return
             }
 
-            for text in textFields {
-                if text.tag == 1 {
-                    self.addPin(title: text.text!, coordinate: coodinate)
-                } else {
-                    
-                }
-            }
+            self.addPin(title: textFields[0].text ?? "", coordinate: coodinate)
+            self.savePin(title: textFields[0].text ?? "", content: textFields[1].text ?? "", latitude: String(coodinate.latitude) ,longitude: String(coodinate.longitude))
         })
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
@@ -304,6 +316,20 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         if let annotation = view.annotation{
             self.toCordinate = annotation.coordinate
             self.toTitle = annotation.title!!
+        }
+    }
+    
+    // ピンの保存
+    func savePin(title: String, content: String, latitude: String, longitude: String) {
+        let pin = Pin()
+        pin.title = title
+        pin.content = content
+        pin.latitude = latitude
+        pin.longitude = longitude
+
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(pin)
         }
     }
 }
