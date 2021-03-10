@@ -33,9 +33,16 @@
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FSl-tf-di5">
                                 <rect key="frame" x="346" y="727" width="48" height="48"/>
-                                <state key="normal" image="icon_147570_48"/>
+                                <state key="normal" image="pointa"/>
                                 <connections>
                                     <action selector="currentLocation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="17D-lr-bYN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EnE-Xm-MPP">
+                                <rect key="frame" x="346" y="633" width="48" height="48"/>
+                                <state key="normal" image="list"/>
+                                <connections>
+                                    <segue destination="eVu-zt-59U" kind="presentation" id="rGh-Bk-LGS"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -49,8 +56,10 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="cwX-f1-Y1Z" secondAttribute="bottom" id="RBf-rw-bni"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cwX-f1-Y1Z" secondAttribute="trailing" id="Ry2-Wq-L8o"/>
                             <constraint firstItem="gAc-QR-JiV" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="33" id="X8f-eS-HbO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="EnE-Xm-MPP" secondAttribute="trailing" constant="20" id="dGL-U7-f37"/>
                             <constraint firstItem="cwX-f1-Y1Z" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="gA1-cs-drr"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="gAc-QR-JiV" secondAttribute="trailing" id="jdU-Uu-fHD"/>
+                            <constraint firstItem="FSl-tf-di5" firstAttribute="top" secondItem="EnE-Xm-MPP" secondAttribute="bottom" constant="46" id="o5k-yr-ZxB"/>
                         </constraints>
                     </view>
                     <connections>
@@ -67,9 +76,38 @@
             </objects>
             <point key="canvasLocation" x="139" y="94"/>
         </scene>
+        <!--Location Table View Controller-->
+        <scene sceneID="HDk-3i-zg9">
+            <objects>
+                <tableViewController id="eVu-zt-59U" customClass="LocationTableViewController" customModule="memoMapβ" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="PUy-87-zOT">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="84" id="H1n-Ks-H1w">
+                                <rect key="frame" x="0.0" y="28" width="414" height="84"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="H1n-Ks-H1w" id="eEO-1m-O1j">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="84"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="eVu-zt-59U" id="AyI-YC-bS4"/>
+                            <outlet property="delegate" destination="eVu-zt-59U" id="L6a-uO-slM"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7BT-kA-I0A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1060.8695652173915" y="93.75"/>
+        </scene>
     </scenes>
     <resources>
-        <image name="icon_147570_48" width="48" height="48"/>
+        <image name="list" width="48" height="48"/>
+        <image name="pointa" width="48" height="48"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
