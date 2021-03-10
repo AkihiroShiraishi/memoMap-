@@ -50,11 +50,12 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         dispMap.delegate = self
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-//        if(CLLocationManager.locationServicesEnabled() != true){
-//            //　位置情報サービスがOFFの場合
-//            alertMessage(message: "位置情報サービスがONになっていないため、現在地情報取得が利用できません。「設定」⇒「プライバシー」⇒「位置情報サービス」")
-//        }
+    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+        // 保存されたピンを表示
+        let annotations = getAnnotations()
+           annotations.forEach { annotation in
+                mapView.addAnnotation(annotation)
+           }
     }
 
     //メッセージ出力メソッド
@@ -312,6 +313,10 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         }
     }
     
+    @objc func tappedRemoveButton() {
+        
+    }
+    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let annotation = view.annotation{
             self.toCordinate = annotation.coordinate
@@ -331,6 +336,32 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         try! realm.write {
             realm.add(pin)
         }
+    }
+    
+    // ピンの取得
+    func getAllPins() -> [Pin] {
+       let realm = try! Realm()
+       var results: [Pin] = []
+       for pin in realm.objects(Pin.self) {
+           results.append(pin)
+       }
+       return results
+    }
+    
+    // 座標の取得
+    func getAnnotations() -> [MKPointAnnotation]  {
+        let pins = getAllPins()
+        var results:[MKPointAnnotation] = []
+
+        pins.forEach { pin in
+            let annotation = MKPointAnnotation()
+            let centerCoordinate = CLLocationCoordinate2D(latitude: (pin.latitude as NSString).doubleValue, longitude:(pin.longitude as NSString).doubleValue)
+            annotation.coordinate = centerCoordinate
+            annotation.title = pin.title
+
+            results.append(annotation)
+        }
+        return results
     }
 }
 
