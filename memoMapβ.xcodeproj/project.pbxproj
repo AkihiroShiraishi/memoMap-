@@ -20,7 +20,8 @@
 		8685507825F7B77700136429 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8685507625F7B77700136429 /* Realm.framework */; };
 		8685507A25F7B77700136429 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8685507725F7B77700136429 /* RealmSwift.framework */; };
 		8685508125F7B78E00136429 /* Pods_memoMapβ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8685508025F7B78E00136429 /* Pods_memoMapβ.framework */; };
-		8685508825F9002000136429 /* LocationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8685508725F9002000136429 /* LocationTableViewController.swift */; };
+		8685509625FA478300136429 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8685509525FA478300136429 /* ListViewController.swift */; };
+		8685509E25FA5E5200136429 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8685509D25FA5E5200136429 /* DetailViewController.swift */; };
 		86F3930625EB225100D050A5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F3930525EB225100D050A5 /* MapKit.framework */; };
 		86F3932025F2596F00D050A5 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 86F3931F25F2596F00D050A5 /* .gitignore */; };
 		86F3932825F25B0800D050A5 /* DestinationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F3932725F25B0800D050A5 /* DestinationViewController.swift */; };
@@ -68,7 +69,8 @@
 		8685507625F7B77700136429 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8685507725F7B77700136429 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8685508025F7B78E00136429 /* Pods_memoMapβ.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = "Pods_memoMapβ.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8685508725F9002000136429 /* LocationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewController.swift; sourceTree = "<group>"; };
+		8685509525FA478300136429 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		8685509D25FA5E5200136429 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		86F3930525EB225100D050A5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		86F3931F25F2596F00D050A5 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		86F3932725F25B0800D050A5 /* DestinationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationViewController.swift; sourceTree = "<group>"; };
@@ -144,7 +146,8 @@
 				860DC64525E47CC900D4B377 /* LaunchScreen.storyboard */,
 				860DC64825E47CC900D4B377 /* Info.plist */,
 				86F3932725F25B0800D050A5 /* DestinationViewController.swift */,
-				8685508725F9002000136429 /* LocationTableViewController.swift */,
+				8685509525FA478300136429 /* ListViewController.swift */,
+				8685509D25FA5E5200136429 /* DetailViewController.swift */,
 			);
 			path = "memoMapβ";
 			sourceTree = "<group>";
@@ -436,8 +439,9 @@
 			files = (
 				860DC63F25E47CC700D4B377 /* ViewController.swift in Sources */,
 				860DC63B25E47CC700D4B377 /* AppDelegate.swift in Sources */,
+				8685509625FA478300136429 /* ListViewController.swift in Sources */,
+				8685509E25FA5E5200136429 /* DetailViewController.swift in Sources */,
 				860DC63D25E47CC700D4B377 /* SceneDelegate.swift in Sources */,
-				8685508825F9002000136429 /* LocationTableViewController.swift in Sources */,
 				86F3932825F25B0800D050A5 /* DestinationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

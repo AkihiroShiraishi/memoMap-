@@ -50,6 +50,11 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         dispMap.delegate = self
     }
     
+    @IBAction func tappedListButton(_ sender: Any) {
+        let listVC = self.storyboard?.instantiateViewController(identifier: "list") as! ListViewController
+        self.navigationController?.pushViewController(listVC, animated: true)
+    }
+    
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         // 保存されたピンを表示
         let annotations = getAnnotations()
@@ -311,10 +316,6 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         } else {
             // 目的地を選択してください
         }
-    }
-    
-    @objc func tappedRemoveButton() {
-        
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
