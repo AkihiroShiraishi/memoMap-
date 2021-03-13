@@ -26,21 +26,25 @@ class Pin: Object {
 
 }
 
-class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate, MKMapViewDelegate, FloatingPanelControllerDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, CLLocationManagerDelegate, MKMapViewDelegate, FloatingPanelControllerDelegate {
 
     @IBOutlet weak var searchInputText: UITextField!
     @IBOutlet weak var dispMap: MKMapView!
+    var registorTextField: UITextField?
     var locationManager: CLLocationManager!
     var latitude: Double = 0.0
     var longitude: Double = 0.0
     var toCordinate: CLLocationCoordinate2D?
     var toTitle: String = ""
     var isUserLocation: Bool = false
-    
     var fpc:FloatingPanelController!
+    var registorAlert: UIAlertController!
+    var pickerView = UIPickerView()
+    var categoryData = ["グルメ", "施設", "その他"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        registorAlert = UIAlertController()
         
         searchInputText.delegate = self
         
@@ -48,7 +52,27 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         locationManager = CLLocationManager()
         locationManager.delegate = self
         dispMap.delegate = self
+        pickerView.delegate = self
+        pickerView.dataSource = self
     }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+            return 1
+        }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return categoryData.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return categoryData[row]
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        registorAlert.textFields?[0].text = categoryData[row]
+    }
+
     
     @IBAction func tappedListButton(_ sender: Any) {
         let listVC = self.storyboard?.instantiateViewController(identifier: "list") as! ListViewController
@@ -185,38 +209,57 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
     }
     
     func registerNewLoccation(coodinate:CLLocationCoordinate2D) {
-        let ac = UIAlertController(title: "タイトル", message: "メッセージ", preferredStyle: .alert)
-        let ok = UIAlertAction(title: "OK", style: .default, handler: {[weak ac] (action) -> Void in
-            guard let textFields = ac?.textFields else {
+        registorAlert = UIAlertController(title: "登録", message: "以下を入力し、目的地を登録してください。", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: {[weak registorAlert] (action) -> Void in
+            guard let textFields = registorAlert?.textFields else {
                 return
             }
 
             guard !textFields.isEmpty else {
                 return
             }
-
-            self.addPin(title: textFields[0].text ?? "", coordinate: coodinate)
-            self.savePin(title: textFields[0].text ?? "", content: textFields[1].text ?? "", latitude: String(coodinate.latitude) ,longitude: String(coodinate.longitude))
+            if textFields[1].text != "" {
+                self.addPin(title: textFields[1].text!, coordinate: coodinate)
+                self.savePin(title: textFields[1].text!, content: textFields[1].text ?? "", latitude: String(coodinate.latitude) ,longitude: String(coodinate.longitude))
+            } else {
+                self.alertMessage(title:"", message: "目的地を入力してください。")
+            }
         })
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
-        //textfiled1の追加
-        ac.addTextField(configurationHandler: {(text:UITextField!) -> Void in
-            text.placeholder = "目的地"
+        registorAlert.addTextField(configurationHandler: {(text:UITextField!) -> Void in
+            text.placeholder = "カテゴリー"
             text.tag  = 1
+            text.inputView = self.pickerView
+            let toolbar = UIToolbar()
+            toolbar.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 44)
+            let doneButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(ViewController.donePicker))
+            toolbar.setItems([doneButtonItem], animated: true)
+            text.inputAccessoryView = toolbar
         })
-        //textfiled2の追加
-        ac.addTextField(configurationHandler: {(text:UITextField!) -> Void in
-            text.placeholder = "内容"
+        // textfiled2の追加
+        registorAlert.addTextField(configurationHandler: {(text:UITextField!) -> Void in
+            text.placeholder = "目的地"
             text.tag  = 2
         })
+        // textfiled3の追加
+        registorAlert.addTextField(configurationHandler: {(text:UITextField!) -> Void in
+            text.placeholder = "内容"
+            text.tag  = 3
+        })
 
-        ac.addAction(ok)
-        ac.addAction(cancel)
+        registorAlert.addAction(ok)
+        registorAlert.addAction(cancel)
 
-        present(ac, animated: true, completion: nil)
+        present(registorAlert, animated: true, completion: nil)
 
     }
+    
+    @objc func donePicker() {
+        let textField = registorAlert.textFields?[0]
+        textField?.endEditing(true)
+    }
+
     
     func addPin(title: String, coordinate: CLLocationCoordinate2D) {
         let pin = MKPointAnnotation()
@@ -367,6 +410,7 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
 }
 
 
+// MARK: - FloatingPanel
 class MyFloatingPanelLayout: FloatingPanelLayout {
     let position: FloatingPanelPosition = .bottom
     let initialState: FloatingPanelState = .tip
