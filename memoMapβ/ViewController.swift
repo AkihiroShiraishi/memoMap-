@@ -59,6 +59,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
         pickerView.dataSource = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.loadView()
+        viewDidLoad()
+    }
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
             return 1
         }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
@@ -47,6 +48,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         } else if detailInfo?.category == "その他" {
             categoryImage.image = UIImage(named: "other64")
             categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.364, green: 0.690, blue: 0.886, alpha: 1.0)
+        } else {
+            categoryImage.image = UIImage(named: "blank")
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.364, green: 0.690, blue: 0.886, alpha: 1.0)
         }
     }
     
@@ -70,6 +74,26 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         }
     }
 
+    @IBAction func tappedDelete(_ sender: Any) {
+        let realm = try! Realm()
+        do{
+          try realm.write{
+            realm.delete(detailInfo!)
+          }
+        }catch {
+          print("Error \(error)")
+        }
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    @IBAction func tappedDone(_ sender: Any) {
+        let realm = try! Realm()
+
+        try! realm.write {
+            detailInfo?.setValue(titleText.text, forKey: "title")
+            detailInfo?.setValue(contentText.text, forKey: "content")
+        }
+        self.navigationController?.popToRootViewController(animated: true)
+    }
     //編集終了後のtextデータを、別のファイルへ送信したい時はこの中に書く。
 //    func textViewDidChange(_ textView: UITextView) {
 //        contentText.text = textView.text
