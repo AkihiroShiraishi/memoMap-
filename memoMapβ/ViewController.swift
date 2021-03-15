@@ -23,6 +23,9 @@ class Pin: Object {
 
     // 経度
     @objc dynamic var longitude = ""
+    
+    // カテゴリー
+    @objc dynamic var category = ""
 
 }
 
@@ -219,8 +222,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
                 return
             }
             if textFields[1].text != "" {
-                self.addPin(title: textFields[1].text!, coordinate: coodinate)
-                self.savePin(title: textFields[1].text!, content: textFields[1].text ?? "", latitude: String(coodinate.latitude) ,longitude: String(coodinate.longitude))
+                self.addPin(category:textFields[0].text!,title: textFields[1].text!, coordinate: coodinate)
+                self.savePin(category:textFields[0].text!,title: textFields[1].text!, content: textFields[2].text ?? "", latitude: String(coodinate.latitude) ,longitude: String(coodinate.longitude))
             } else {
                 self.alertMessage(title:"", message: "目的地を入力してください。")
             }
@@ -261,7 +264,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
     }
 
     
-    func addPin(title: String, coordinate: CLLocationCoordinate2D) {
+    func addPin(category: String, title: String, coordinate: CLLocationCoordinate2D) {
         let pin = MKPointAnnotation()
         // 座標をピンに設定
         pin.coordinate = coordinate
@@ -369,8 +372,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
     }
     
     // ピンの保存
-    func savePin(title: String, content: String, latitude: String, longitude: String) {
+    func savePin(category: String, title: String, content: String, latitude: String, longitude: String) {
         let pin = Pin()
+        pin.category = category
         pin.title = title
         pin.content = content
         pin.latitude = latitude

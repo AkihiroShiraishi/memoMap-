@@ -10,6 +10,7 @@ import RealmSwift
 
 class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var tableView: UITableView!
     var lists: [Pin]?
     
 
@@ -17,6 +18,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         let vc = ViewController()
         self.lists = vc.getAllPins()
+        self.tableView.delegate = self
+        self.view.backgroundColor = .white
+        self.tableView.backgroundColor = .white
+        
         // Do any additional setup after loading the view.
     }
     
@@ -32,7 +37,17 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         cell.textLabel?.text = self.lists?[indexPath.row].title
+        cell.textLabel?.textColor = .black
+        cell.backgroundColor = .white
+        cell.isHighlighted = false
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailVC = self.storyboard?.instantiateViewController(identifier: "detail") as! DetailViewController
+        detailVC.detailInfo = self.lists![indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.navigationController?.pushViewController(detailVC, animated: true)
     }
     
     @IBAction func returnButton(_ sender: Any) {
