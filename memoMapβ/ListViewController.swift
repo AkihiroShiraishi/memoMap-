@@ -10,6 +10,7 @@ import RealmSwift
 
 class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    
     @IBOutlet weak var tableView: UITableView!
     var lists: [Pin]?
     
@@ -34,12 +35,26 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         return self.lists?.count ?? 0
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 65
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
-        cell.textLabel?.text = self.lists?[indexPath.row].title
-        cell.textLabel?.textColor = .black
+        let cell: CustomCellTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCellTableViewCell
+        cell.cellLabel.text = self.lists?[indexPath.row].title
+        cell.cellLabel.textColor = .black
         cell.backgroundColor = .white
-        cell.isHighlighted = false
+        
+        let category = self.lists?[indexPath.row].category
+        if category == "グルメ" {
+            cell.cellImageView.image = UIImage(named: "gurume")
+        } else if category == "施設" {
+            cell.cellImageView.image = UIImage(named: "facility")
+        } else if category == "その他" {
+            cell.cellImageView.image = UIImage(named: "other")
+        } else {
+            cell.cellImageView.image = UIImage(named: "blank")
+        }
         return cell
     }
     
