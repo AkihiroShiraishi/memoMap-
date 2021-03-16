@@ -40,13 +40,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         
         
         if detailInfo?.category == "グルメ" {
-            categoryImage.image = UIImage(named: "gurume64")
+            categoryImage.image = UIImage(named: "gurume")
             categoryImage.backgroundColor = UIColor.init(displayP3Red: 1.0, green: 0.772, blue: 0.505, alpha: 1.0)
         } else if detailInfo?.category == "施設" {
-            categoryImage.image = UIImage(named: "facility64")
+            categoryImage.image = UIImage(named: "facility")
             categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.364, green: 0.690, blue: 0.886, alpha: 1.0)
         } else if detailInfo?.category == "その他" {
-            categoryImage.image = UIImage(named: "other64")
+            categoryImage.image = UIImage(named: "other")
             categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.364, green: 0.690, blue: 0.886, alpha: 1.0)
         } else {
             categoryImage.image = UIImage(named: "blank")

@@ -31,6 +31,7 @@ class Pin: Object {
 
 class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, CLLocationManagerDelegate, MKMapViewDelegate, FloatingPanelControllerDelegate {
 
+    @IBOutlet var longTap: UILongPressGestureRecognizer!
     @IBOutlet weak var searchInputText: UITextField!
     @IBOutlet weak var dispMap: MKMapView!
     var registorTextField: UITextField?
@@ -43,7 +44,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
     var fpc:FloatingPanelController!
     var registorAlert: UIAlertController!
     var pickerView = UIPickerView()
-    var categoryData = ["グルメ", "施設", "その他"]
+    var categoryData = ["","グルメ", "施設", "その他"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
         dispMap.delegate = self
         pickerView.delegate = self
         pickerView.dataSource = self
+        view.addGestureRecognizer(longTap)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -304,13 +307,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegat
         let pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: nil)
         //吹き出しを表示可能にする。
         pin.canShowCallout = true
+        pin.pinTintColor = UIColor(displayP3Red: 1.0, green: 0.388, blue: 0.278, alpha: 1.0)
 
         //経路ボタンをアノテーションビューに追加する。
         let button = UIButton()
         button.frame = CGRect(x: 0,y: 0,width: 40,height: 30)
-        button.setTitle("経路", for: .normal)
+        button.setImage(UIImage(named: "goTo"), for: .normal)
         button.layer.cornerRadius = 0.5
-        button.backgroundColor = UIColor.white
+        button.backgroundColor = UIColor.clear
         button.setTitleColor(UIColor.black, for:.normal)
         button.addTarget(self, action: #selector(tappedRouteButton(_:toCordinate:)), for: UIControl.Event.touchUpInside)
         pin.rightCalloutAccessoryView = button
