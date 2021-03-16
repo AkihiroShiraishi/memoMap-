@@ -11,6 +11,7 @@ import RealmSwift
 class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
 
+    @IBOutlet weak var imageBackLabel: UILabel!
     @IBOutlet weak var categoryImage: UIImageView!
     @IBOutlet weak var titleText: UITextField!
     @IBOutlet weak var contentText: UITextView!
@@ -41,16 +42,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         
         if detailInfo?.category == "グルメ" {
             categoryImage.image = UIImage(named: "gurume")
-            categoryImage.backgroundColor = UIColor.init(displayP3Red: 1.0, green: 0.772, blue: 0.505, alpha: 1.0)
+            imageBackLabel.backgroundColor = UIColor.init(displayP3Red: 1.0, green: 0.388, blue: 0.278, alpha: 1.0)
         } else if detailInfo?.category == "施設" {
             categoryImage.image = UIImage(named: "facility")
-            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.364, green: 0.690, blue: 0.886, alpha: 1.0)
+            imageBackLabel.backgroundColor = UIColor.init(displayP3Red: 0, green: 0.794, blue: 1.0, alpha: 1.0)
         } else if detailInfo?.category == "その他" {
             categoryImage.image = UIImage(named: "other")
-            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.364, green: 0.690, blue: 0.886, alpha: 1.0)
+            imageBackLabel.backgroundColor = UIColor.init(displayP3Red: 0.690, green: 0.768, blue: 0.870, alpha: 1.0)
         } else {
             categoryImage.image = UIImage(named: "blank")
-            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.364, green: 0.690, blue: 0.886, alpha: 1.0)
+            imageBackLabel.backgroundColor = UIColor.init(displayP3Red: 0.662, green: 0.662, blue: 0.662, alpha: 1.0)
         }
     }
     
