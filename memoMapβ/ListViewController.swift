@@ -20,8 +20,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         let vc = ViewController()
         self.lists = vc.getAllPins()
         self.tableView.delegate = self
-        self.view.backgroundColor = .white
-        self.tableView.backgroundColor = .white
+        self.view.backgroundColor = UIColor(displayP3Red: 0.972, green: 0.972, blue: 1.0, alpha: 1.0)
+        self.tableView.backgroundColor = UIColor(displayP3Red: 0.972, green: 0.972, blue: 1.0, alpha: 1.0)
         
         // Do any additional setup after loading the view.
     }
@@ -43,7 +43,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cell: CustomCellTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCellTableViewCell
         cell.cellLabel.text = self.lists?[indexPath.row].title
         cell.cellLabel.textColor = .black
-        cell.backgroundColor = .white
+        cell.backgroundColor = UIColor(displayP3Red: 0.972, green: 0.972, blue: 1.0, alpha: 1.0)
         
         let category = self.lists?[indexPath.row].category
         if category == "グルメ" {

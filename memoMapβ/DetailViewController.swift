@@ -8,25 +8,66 @@
 import UIKit
 import RealmSwift
 
-class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+            return 1
+        }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return categoryData.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return categoryData[row]
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectImageName = categoryData[row]
+        if categoryData[row] == "グルメ" {
+            categoryText.text = "グルメ"
+            categoryImage.image = UIImage(named: "gurume")
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 1.0, green: 0.388, blue: 0.278, alpha: 1.0)
+        } else if categoryData[row] == "施設" {
+            categoryText.text = "施設"
+            categoryImage.image = UIImage(named: "facility")
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0, green: 0.794, blue: 1.0, alpha: 1.0)
+        } else if categoryData[row] == "その他" {
+            categoryText.text = "その他"
+            categoryImage.image = UIImage(named: "other")
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.690, green: 0.768, blue: 0.870, alpha: 1.0)
+        } else {
+            categoryText.text = "Category Space"
+            categoryImage.image = UIImage(named: "blank")
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.662, green: 0.662, blue: 0.662, alpha: 1.0)
+        }
+    }
+
+    
     
 
-    @IBOutlet weak var imageBackLabel: UILabel!
     @IBOutlet weak var categoryImage: UIImageView!
+    @IBOutlet weak var categoryText: UITextField!
     @IBOutlet weak var titleText: UITextField!
     @IBOutlet weak var contentText: UITextView!
     
     var detailInfo: Pin?
+    
+    var pickerView: UIPickerView = UIPickerView()
+    var toolBar: UIToolbar?
+    var selectImageName: String?
+    var categoryData = ["","グルメ", "施設", "その他"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         titleText.delegate = self
         contentText.delegate = self
         
+        pickerView.delegate = self
+        pickerView.dataSource = self
         
-        initLayout()
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = UIColor(displayP3Red: 0.972, green: 0.972, blue: 1.0, alpha: 1.0)
         titleText.backgroundColor = .white
         titleText.textColor = .black
         titleText.layer.borderColor = UIColor.black.cgColor
@@ -39,32 +80,46 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         titleText.text = detailInfo?.title
         contentText.text = detailInfo?.content
         
+        categoryText.backgroundColor = UIColor(displayP3Red: 0.972, green: 0.972, blue: 1.0, alpha: 1.0)
+        categoryText.layer.borderColor = UIColor(displayP3Red: 0.972, green: 0.972, blue: 1.0, alpha: 1.0).cgColor
+        categoryText.textAlignment = .center
+        categoryText.textColor = .black
+        categoryText.font = UIFont.boldSystemFont(ofSize: 25)
         
+        self.selectImageName = detailInfo?.category
         if detailInfo?.category == "グルメ" {
+            categoryText.text = "グルメ"
             categoryImage.image = UIImage(named: "gurume")
-            imageBackLabel.backgroundColor = UIColor.init(displayP3Red: 1.0, green: 0.388, blue: 0.278, alpha: 1.0)
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 1.0, green: 0.388, blue: 0.278, alpha: 1.0)
         } else if detailInfo?.category == "施設" {
+            categoryText.text = "施設"
             categoryImage.image = UIImage(named: "facility")
-            imageBackLabel.backgroundColor = UIColor.init(displayP3Red: 0, green: 0.794, blue: 1.0, alpha: 1.0)
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0, green: 0.794, blue: 1.0, alpha: 1.0)
         } else if detailInfo?.category == "その他" {
+            categoryText.text = "その他"
             categoryImage.image = UIImage(named: "other")
-            imageBackLabel.backgroundColor = UIColor.init(displayP3Red: 0.690, green: 0.768, blue: 0.870, alpha: 1.0)
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.690, green: 0.768, blue: 0.870, alpha: 1.0)
         } else {
+            categoryText.text = "Category Space"
             categoryImage.image = UIImage(named: "blank")
-            imageBackLabel.backgroundColor = UIColor.init(displayP3Red: 0.662, green: 0.662, blue: 0.662, alpha: 1.0)
+            categoryImage.backgroundColor = UIColor.init(displayP3Red: 0.662, green: 0.662, blue: 0.662, alpha: 1.0)
         }
-    }
-    
-    
-    func initLayout() {
         
+        // カテゴリーテキスト設定
+        settingCategory()
     }
-    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // キーボードを閉じる
         textField.resignFirstResponder()
         titleText.text = textField.text
+        
+        return true
+    }
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        textView.resignFirstResponder()
+        contentText.text = textView.text
         return true
     }
     
@@ -72,6 +127,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if (self.contentText.isFirstResponder) {
             self.contentText.resignFirstResponder()
+            toolBar?.removeFromSuperview()
+            pickerView.removeFromSuperview()
         }
     }
 
@@ -90,24 +147,34 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UITextViewDel
         let realm = try! Realm()
 
         try! realm.write {
+            detailInfo?.setValue(selectImageName, forKey: "category")
             detailInfo?.setValue(titleText.text, forKey: "title")
             detailInfo?.setValue(contentText.text, forKey: "content")
         }
         self.navigationController?.popToRootViewController(animated: true)
     }
-    //編集終了後のtextデータを、別のファイルへ送信したい時はこの中に書く。
-//    func textViewDidChange(_ textView: UITextView) {
-//        contentText.text = textView.text
-//    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    @IBAction func tappedCategoryButton(_ sender: Any) {
+        
     }
-    */
-
+    func settingCategory() {
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        pickerView.backgroundColor = UIColor.white
+        pickerView.setValue(UIColor.black, forKey: "textColor")
+        pickerView.autoresizingMask = .flexibleWidth
+        pickerView.contentMode = .center
+        pickerView.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 300)
+        
+        categoryText.inputView = pickerView
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 44)
+        let doneButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action:#selector(onDoneButtonTapped))
+        toolbar.setItems([doneButtonItem], animated: true)
+        categoryText.inputAccessoryView = toolbar
+    }
+    @objc func onDoneButtonTapped() {
+        categoryText.endEditing(true)
+    }
+    
 }
